@@ -29,12 +29,7 @@ void display(process *p, int n)
 
 bool sortfunction(process p1, process p2)
 {
-    return p1.at < p2.at;
-}
-
-bool compare2(process p1, process p2)
-{
-    return p1.pid < p2.pid;
+    return p1.at <= p2.at;
 }
 
 int main()
@@ -49,13 +44,11 @@ int main()
 
     cout << "Enter Number of processes :";
     cin >> n;
-    cout << endl;
 
     cout << "Enter Time Quantum :";
     cin >> timeQ;
-    cout << endl;
 
-    process p[n];
+    process p[100];
 
     for (int i = 0; i < n; i++)
     {
@@ -68,7 +61,7 @@ int main()
         cout << endl;
     }
 
-    sort(p, p + n, sortfunction);
+        sort(p, p + n, sortfunction);
 
     queue<int> rq; //index store for ready state
 
@@ -93,7 +86,7 @@ int main()
 
         if (p[index].btrem-timeQ > 0)
         {
-            p[index].btrem -= timeQ;
+            p[index].btrem =p[index].btrem-timeQ;
             timer += timeQ;
         }
 
@@ -104,6 +97,7 @@ int main()
             doneprocess++;
             
             p[index].ct = timer;
+            // cout<<index<<" : "<<p[index].ct<<endl;
             p[index].tt = p[index].ct - p[index].at;
             p[index].wt = p[index].tt - p[index].bt;
             p[index].rt = p[index].st - p[index].at;
@@ -122,7 +116,7 @@ int main()
             if (p[i].btrem > 0 && p[i].at <= timer && mark[i] == 0)
             {
                 rq.push(i);
-                mark[i] == 1;
+                mark[i] = 1;
             }
         }
 
@@ -153,12 +147,12 @@ int main()
     float avg_wt;
     float avg_rt;
 
-    float throughput;
 
 
-    avg_tt = total_tt / n;
-    avg_wt = total_wt / n;
-    avg_rt = total_rt / n;
+
+    avg_tt = (float)total_tt / n;
+    avg_wt = (float)total_wt / n;
+    avg_rt = (float)total_rt / n;
 
     cout<<endl;
 
