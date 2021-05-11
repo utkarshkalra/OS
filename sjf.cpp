@@ -8,13 +8,13 @@ class process
 {
 public:
     int pid;
-    int arrival_time;
-    int burst_time;
-    int start_time;
-    int completion_time;
-    int turnaround_time;
-    int waiting_time;
-    int response_time;
+    int at;
+    int bt;
+    int st;
+    int ct;
+    int tat;
+    int wt;
+    int rt;
 };
 
 int main()
@@ -22,13 +22,13 @@ int main()
 
     int n;
     process p[100];
-    float avg_turnaround_time;
-    float avg_waiting_time;
-    float avg_response_time;
+    float avg_tat;
+    float avg_wt;
+    float avg_rt;
 
-    int total_turnaround_time = 0;
-    int total_waiting_time = 0;
-    int total_response_time = 0;
+    int total_tat = 0;
+    int total_wt = 0;
+    int total_rt = 0;
 
     int is_completed[100];
     memset(is_completed, 0, sizeof(is_completed));
@@ -43,9 +43,9 @@ int main()
     for (int i = 0; i < n; i++)
     {
         cout << "Enter arrival time of process " << i + 1 << ": ";
-        cin >> p[i].arrival_time;
+        cin >> p[i].at;
         cout << "Enter burst time of process " << i + 1 << ": ";
-        cin >> p[i].burst_time;
+        cin >> p[i].bt;
         p[i].pid = i + 1;
         cout << endl;
     }
@@ -60,18 +60,18 @@ int main()
         int mn = 10000000;
         for (int i = 0; i < n; i++)
         {
-            if (p[i].arrival_time <= current_time && is_completed[i] == 0)
+            if (p[i].at <= current_time && is_completed[i] == 0)
             {
-                if (p[i].burst_time < mn)
+                if (p[i].bt < mn)
                 {
-                    mn = p[i].burst_time;
+                    mn = p[i].bt;
                     idx = i;
                 }
-                if (p[i].burst_time == mn)
+                if (p[i].bt == mn)
                 {
-                    if (p[i].arrival_time < p[idx].arrival_time)
+                    if (p[i].at < p[idx].at)
                     {
-                        mn = p[i].burst_time;
+                        mn = p[i].bt;
                         idx = i;
                     }
                 }
@@ -79,20 +79,20 @@ int main()
         }
         if (idx != -1)
         {
-            p[idx].start_time = current_time;
-            p[idx].completion_time = p[idx].start_time + p[idx].burst_time;
+            p[idx].st = current_time;
+            p[idx].ct = p[idx].st + p[idx].bt;
     
-            p[idx].turnaround_time = p[idx].completion_time - p[idx].arrival_time;
-            p[idx].waiting_time = p[idx].turnaround_time - p[idx].burst_time;
-            p[idx].response_time = p[idx].start_time - p[idx].arrival_time;
+            p[idx].tat = p[idx].ct - p[idx].at;
+            p[idx].wt = p[idx].tat - p[idx].bt;
+            p[idx].rt = p[idx].st - p[idx].at;
 
-            total_turnaround_time += p[idx].turnaround_time;
-            total_waiting_time += p[idx].waiting_time;
-            total_response_time += p[idx].response_time;
+            total_tat += p[idx].tat;
+            total_wt += p[idx].wt;
+            total_rt += p[idx].rt;
 
             is_completed[idx] = 1;
             completed++;
-            current_time = p[idx].completion_time;
+            current_time = p[idx].ct;
             prev = current_time;
         }
         else
@@ -101,17 +101,10 @@ int main()
         }
     }
 
-    // int min_arrival_time = 10000000;
-    // int max_completion_time = -1;
-    // for (int i = 0; i < n; i++)
-    // {
-    //     min_arrival_time = min(min_arrival_time, p[i].arrival_time);
-    //     max_completion_time = max(max_completion_time, p[i].completion_time);
-    // }
 
-    avg_turnaround_time = (float)total_turnaround_time / n;
-    avg_waiting_time = (float)total_waiting_time / n;
-    avg_response_time = (float)total_response_time / n;
+    avg_tat = (float)total_tat / n;
+    avg_wt = (float)total_wt / n;
+    avg_rt = (float)total_rt / n;
 
     cout << endl
          << endl;
@@ -129,12 +122,12 @@ int main()
 
     for (int i = 0; i < n; i++)
     {
-        cout << p[i].pid << "\t" << p[i].arrival_time << "\t" << p[i].burst_time << "\t" << p[i].start_time << "\t" << p[i].completion_time << "\t" << p[i].turnaround_time << "\t" << p[i].waiting_time << "\t" << p[i].response_time << "\t"
+        cout << p[i].pid << "\t" << p[i].at << "\t" << p[i].bt << "\t" << p[i].st << "\t" << p[i].ct << "\t" << p[i].tat << "\t" << p[i].wt << "\t" << p[i].rt << "\t"
              << "\n"
              << endl;
     }
-    cout << "Average Turnaround Time = " << avg_turnaround_time << endl;
-    cout << "Average Waiting Time = " << avg_waiting_time << endl;
-    cout << "Average Response Time = " << avg_response_time << endl;
+    cout << "Average Turnaround Time = " << avg_tat << endl;
+    cout << "Average Waiting Time = " << avg_wt << endl;
+    cout << "Average Response Time = " << avg_rt << endl;
 
 }
